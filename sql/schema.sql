@@ -18,7 +18,7 @@ USE `wallet` ;
 -- Table `wallet`.`currency`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wallet`.`currency` (
-  `currency` VARCHAR(3) NOT NULL,
+  `currency` VARCHAR(4) NOT NULL,
   `real` TINYINT NULL,
   PRIMARY KEY (`currency`))
 ENGINE = InnoDB;
@@ -29,7 +29,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wallet`.`player` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `currency` VARCHAR(3) NOT NULL,
+  `currency` VARCHAR(4) NOT NULL,
   `credit` BIGINT NULL,
   `external_id` VARCHAR(45) NULL,
   PRIMARY KEY (`id`),
@@ -47,8 +47,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `wallet`.`wallet` (
   `hash` VARCHAR(70) NOT NULL,
-  `currency` VARCHAR(3) NOT NULL,
+  `currency` VARCHAR(4) NOT NULL,
   `player_id` INT NOT NULL,
+  `virtual_credit` BIGINT NOT NULL,
   PRIMARY KEY (`hash`),
   INDEX `fk_wallet_currency1_idx` (`currency` ASC) VISIBLE,
   INDEX `fk_wallet_player1_idx` (`player_id` ASC) VISIBLE,
@@ -81,6 +82,7 @@ CREATE TABLE IF NOT EXISTS `wallet`.`transaction` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+CREATE UNIQUE INDEX unique_wallet ON wallet(currency, player_id);
 
 DELIMITER $$
 
@@ -98,6 +100,22 @@ END$$
 
 DELIMITER ;
 
+
+DELIMITER $$
+
+CREATE TRIGGER currency_trigger_wallet
+    BEFORE INSERT
+    ON wallet FOR EACH ROW
+BEGIN
+	DECLARE is_real TINYINT;
+    SELECT currency.real FROM currency WHERE currency=NEW.currency INTO is_real;
+    
+    IF is_real THEN
+        SIGNAL SQLSTATE '45000'  SET MESSAGE_TEXT = "Cannot set real currency for crypto wallet.";
+    END IF;
+END$$    
+
+DELIMITER ;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

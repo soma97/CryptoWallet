@@ -27,4 +27,11 @@ public class PlayerService {
     public PlayerResponse createPlayer(PlayerRequest playerRequest) {
         return playerMapper.toView(playerRepository.save(playerMapper.toModel(playerRequest)));
     }
+
+    public void deletePlayer(int id) {
+        if(!playerRepository.existsById(id)) {
+            throw new NotFoundException(Player.class, id);
+        }
+        playerRepository.deleteById(id);
+    }
 }

@@ -18,15 +18,21 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}")
-    public PlayerResponse getPlayer(@PathVariable("id") int id) {
-        return playerService.retrievePlayer(id);
+    public ResponseEntity<PlayerResponse> getPlayer(@PathVariable("id") int id) {
+        return ResponseEntity.ok(playerService.retrievePlayer(id));
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<PlayerResponse> postPlayer(@RequestBody @Valid PlayerRequest playerRequest) {
         PlayerResponse playerResponse = playerService.createPlayer(playerRequest);
         return ResponseEntity.created(ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(playerResponse.id()).toUri()).build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<PlayerResponse> deletePlayer(@PathVariable("id") int id) {
+        playerService.deletePlayer(id);
+        return ResponseEntity.noContent().build();
     }
 }

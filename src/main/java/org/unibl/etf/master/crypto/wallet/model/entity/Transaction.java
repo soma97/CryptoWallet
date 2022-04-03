@@ -1,6 +1,8 @@
 package org.unibl.etf.master.crypto.wallet.model.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 import java.util.Objects;
@@ -8,6 +10,8 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Transaction {
     @Basic
     @Column(name = "type")

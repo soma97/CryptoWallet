@@ -10,17 +10,31 @@ import java.sql.SQLIntegrityConstraintViolationException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleArgumentException(IllegalArgumentException ex) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<String> handleEntityAlreadyExistsException(EntityAlreadyExistsException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());
     }
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
+    @ExceptionHandler(NotEnoughFundsException.class)
+    public ResponseEntity<String> handleNotEnoughFundsException(NotEnoughFundsException ex) {
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.PAYMENT_REQUIRED)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ThirdPartyOperationException.class)
+    public ResponseEntity<String> handleThirdPartyOperationException(ThirdPartyOperationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.FAILED_DEPENDENCY)
                 .body(ex.getMessage());
     }
 
@@ -37,5 +51,4 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ex.getCause().getCause().getMessage());
     }
-
 }

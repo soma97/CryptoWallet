@@ -15,7 +15,7 @@ public class NotFoundException extends RuntimeException {
     }
 
     private static String getFormattedMessage(String entity, String id) {
-        return String.format("%s with id %s not found", entity, id);
+        return String.format("%s with id %s not found.", entity, id);
     }
 }
 
