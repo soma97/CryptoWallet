@@ -1,13 +1,13 @@
 package org.unibl.etf.master.crypto.wallet.model.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -22,6 +22,12 @@ public class Player {
     @Basic
     @Column(name = "external_id")
     private String externalId;
+
+    public Player(String currency, long credit, String externalId) {
+        this.currency = currency;
+        this.credit = credit;
+        this.externalId = externalId;
+    }
 
     @Override
     public boolean equals(Object o) {
