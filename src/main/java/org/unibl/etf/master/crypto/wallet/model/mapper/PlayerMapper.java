@@ -12,10 +12,10 @@ import org.unibl.etf.master.crypto.wallet.model.response.PlayerResponse;
 public class PlayerMapper {
 
     public Player toModel(PlayerRequest playerRequest){
-        return new Player(playerRequest.currency(), playerRequest.credit(), playerRequest.externalId());
+        return new Player(playerRequest.currency(), playerRequest.externalId());
     }
 
     public PlayerResponse toView(Player player){
-        return new PlayerResponse(player.getId(), player.getCurrency(), player.getCredit(), player.getExternalId());
+        return new PlayerResponse(player.getId(), player.getCurrency(), player.getExternalId());
     }
 }

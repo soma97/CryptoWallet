@@ -2,18 +2,18 @@ package org.unibl.etf.master.crypto.wallet.enums;
 
 import lombok.Getter;
 
-public enum TransactionType {
-    WITHDRAW(1), DEPOSIT(2);
+public enum BetType {
+    BET(1), WIN(2), BET_ROLLBACK(41), WIN_ROLLBACK(42);
 
     @Getter
     private final int type;
 
-    TransactionType(int type) {
+    BetType(int type) {
         this.type = type;
     }
 
     @Override
     public String toString() {
-        return type == WITHDRAW.getType() ? "Withdraw" : "Deposit";
+        return this.name();
     }
 }

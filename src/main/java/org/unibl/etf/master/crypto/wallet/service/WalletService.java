@@ -1,10 +1,7 @@
 package org.unibl.etf.master.crypto.wallet.service;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
-import org.unibl.etf.master.crypto.wallet.configuration.CacheConfiguration;
 import org.unibl.etf.master.crypto.wallet.enums.TransactionType;
 import org.unibl.etf.master.crypto.wallet.exception.EntityAlreadyExistsException;
 import org.unibl.etf.master.crypto.wallet.exception.NotEnoughFundsException;
@@ -32,7 +29,6 @@ public class WalletService {
         this.walletMapper = walletMapper;
     }
 
-    @Cacheable(value = CacheConfiguration.WALLETS_CACHE_NAME, key = "#hash")
     public WalletResponse retrieveWallet(String hash) {
         return walletRepository.findById(hash)
                 .map(walletMapper::toView)
@@ -41,7 +37,7 @@ public class WalletService {
 
     public WalletResponse createWallet(WalletRequest walletRequest) {
         if (walletRepository.exists(Example
-                .of(new Wallet(null, walletRequest.virtualCurrency(), null, walletRequest.playerId())))) {
+                .of(new Wallet(null, walletRequest.virtualCurrency(), 0.0, walletRequest.playerId())))) {
             throw new EntityAlreadyExistsException(Wallet.class);
         }
 
@@ -57,7 +53,6 @@ public class WalletService {
         return walletMapper.toView(walletRepository.save(newWallet));
     }
 
-    @CacheEvict(value = CacheConfiguration.WALLETS_CACHE_NAME, key = "#walletHash")
     public WalletResponse withdrawCrypto(String walletHash, TransactionRequest transactionRequest) {
         Wallet wallet = walletRepository.findById(walletHash)
                 .orElseThrow(() -> new NotFoundException(Wallet.class, walletHash));

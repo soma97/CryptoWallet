@@ -9,12 +9,29 @@ import java.util.Objects;
 @Getter
 @Setter
 public class Currency {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "currency")
     private String currency;
     @Basic
     @Column(name = "real")
     private Byte real;
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public Byte getReal() {
+        return real;
+    }
+
+    public void setReal(Byte real) {
+        this.real = real;
+    }
 
     @Override
     public boolean equals(Object o) {

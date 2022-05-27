@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -21,10 +22,42 @@ public class Wallet {
     private String currency;
     @Basic
     @Column(name = "virtual_credit")
-    private Long virtualCredit;
+    private double virtualCredit;
     @Basic
     @Column(name = "player_id")
     private int playerId;
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public double getVirtualCredit() {
+        return virtualCredit;
+    }
+
+    public void setVirtualCredit(double virtualCredit) {
+        this.virtualCredit = virtualCredit;
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
 
     @Override
     public boolean equals(Object o) {
